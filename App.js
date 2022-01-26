@@ -1,23 +1,45 @@
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 import AppLoading from 'expo-app-loading';
-import { useFonts, Oswald_400Regular } from '@expo-google-fonts/oswald';
-import { StyleSheet, Text, View, Image, ImageBackground, TextInput } from 'react-native';
 
-  
+import { StyleSheet, Text, View, Image, ImageBackground, TextInput, Button, Pressable } from 'react-native';
+import * as Font from 'expo-font';
+
+let num = 0
 
 const bgimage='https://w0.peakpx.com/wallpaper/723/48/HD-wallpaper-aesthetic-black-cute-lembut-panda-pink-white.jpg'
 const bgimage2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS74F5HTKMVGVSwgdODqhHTmDZ8U5Ae1ZMrNw&usqp=CAU"
 
-export default function App() {
-  let [fontsLoaded] = useFonts({
-    Oswald_400Regular,
-  });
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
+let customFonts = {
+  'Oswald-Regular': require('./assets/fonts/Oswald-Regular.ttf'),
+};
 
-    return (
-      <ImageBackground source={{uri: bgimage,}} style={styles.image}>
+
+export default class App extends React.Component {
+
+  state = {
+    num: 0,
+    fontsLoaded: false,
+  }
+async _loadFontsAsync() {
+  await Font.loadAsync(customFonts);
+  this.setState({fontsLoaded: true});
+}
+componentDidMount() {
+  this._loadFontsAsync();
+}
+
+  increase = ()=> {
+    this.setState({
+      num: this.state.num + 1,
+    })
+  }
+    render() {
+      
+      if (!this.state.fontsLoaded) {
+         return <AppLoading />;
+      }
+     return( <ImageBackground source={{uri: bgimage,}} style={styles.image}>
         <View style={styles.image}>
 
           <View style={styles.topbox}>
@@ -28,21 +50,28 @@ export default function App() {
             <TextInput
               style={styles.input}
               placeholder="Username"
-              keyboardType="alphanumeric"
+              keyboardType="default"
             />
             <Text style={styles.loginboxtext}>PASSWORD:</Text>
             <TextInput
               secureTextEntry={true}
               style={styles.input}
               placeholder="Password"
-              keyboardType="alphanumeric"
+              keyboardType="default"
+            />
+            <Text style={[styles.loginboxtext, {textAlign: 'center'}]}>{this.state.num}</Text>
+          <Button
+            title='+'
+            onPress = {this.increase}
+            style={[{width: '10%', borderRadius: 100}]}
             />
           </View>
         </View>
       </ImageBackground>
-    );
+      );
+    }
   }
-}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -63,13 +92,13 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
     width: '80%',
-    height: '30%',
+    height: '35%',
     opacity: 1,
     backgroundColor: '#FF97D9',
     borderRadius: 30
   },
   loginboxtext: {
-    fontFamily: "Oswald_400Regular",
+    fontFamily: "Oswald-Regular",
     fontSize: 20,
     color: "white",
     marginLeft: 10,
@@ -85,7 +114,7 @@ const styles = StyleSheet.create({
     
   },
   logintext: {
-    fontFamily: "Oswald_400Regular",
+    fontFamily: "Oswald-Regular",
     fontSize: 20,
     color: "white",
   },
