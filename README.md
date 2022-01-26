@@ -1,4 +1,4 @@
-# ACDA2
+# AC All DAs ReadMe (screenshots)
 ## Code is in master branch
 
 ### DA3 Android Club FFCS (I have not removed the login components as they will be used further)
